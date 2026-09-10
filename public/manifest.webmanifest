@@ -1,0 +1,38 @@
+{
+  "id": "/",
+  "name": "Fútbol+ | 1.000 Ejercicios de Fútbol",
+  "short_name": "Fútbol+",
+  "description": "1.000 ejercicios de fútbol, 9 bonos profesionales y herramientas tácticas para entrenadores y jugadores.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0a2e1c",
+  "background_color": "#0b120e",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
