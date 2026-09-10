@@ -1,8 +1,8 @@
 import React from 'react';
-import { Shield, BookOpen, Heart, Layers, Gift, FileText, ShoppingBag, Dumbbell } from 'lucide-react';
+import { Shield, BookOpen, Heart, Layers, Gift, FileText, Dumbbell } from 'lucide-react';
 import { PWAInstallButton } from './PWAInstallButton';
 
-export type ActiveTab = 'inicio' | 'ejercicios' | 'favoritos' | 'entrenamientos' | 'bonos' | 'fichas' | 'ventas';
+export type ActiveTab = 'inicio' | 'ejercicios' | 'favoritos' | 'entrenamientos' | 'bonos' | 'fichas';
 
 interface Props {
   activeTab: ActiveTab;
@@ -125,22 +125,8 @@ export const Header: React.FC<Props> = ({
             </button>
           </nav>
 
-          {/* Right actions: Sales Page toggle + Install button */}
+          {/* Right actions: Install button */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setActiveTab(activeTab === 'ventas' ? 'inicio' : 'ventas')}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                activeTab === 'ventas'
-                  ? 'bg-amber-400 text-black border-amber-300 shadow-md shadow-amber-900/30'
-                  : 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
-              }`}
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{activeTab === 'ventas' ? 'Volver a la App' : 'Página de Venta'}</span>
-              <span className="sm:hidden">{activeTab === 'ventas' ? 'App' : 'Oferta'}</span>
-            </button>
-
             <PWAInstallButton variant="minimal" />
           </div>
         </div>

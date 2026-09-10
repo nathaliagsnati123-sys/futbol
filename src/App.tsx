@@ -9,7 +9,6 @@ import { DashboardView } from './components/dashboard/DashboardView';
 import { TrainingView } from './components/training/TrainingView';
 import { BonusesView } from './components/bonuses/BonusesView';
 import { FichasView } from './components/sheets/FichasView';
-import { SalesLandingPage } from './components/landing/SalesLandingPage';
 import { allExercises } from './data/exercises';
 import { Exercise, FilterState } from './types';
 import {
@@ -418,11 +417,6 @@ export default function App() {
 
         {/* TAB 6: FICHAS TÉCNICAS */}
         {activeTab === 'fichas' && <FichasView />}
-
-        {/* TAB 7: PÁGINA DE VENTAS */}
-        {activeTab === 'ventas' && (
-          <SalesLandingPage onEnterApp={() => setActiveTab('inicio')} />
-        )}
       </main>
 
       {/* Bottom Mobile Navigation */}
