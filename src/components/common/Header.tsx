@@ -111,18 +111,6 @@ export const Header: React.FC<Props> = ({
               <Gift className="w-3.5 h-3.5 text-amber-400" />
               <span>10 Bonos</span>
             </button>
-
-            <button
-              onClick={() => setActiveTab('fichas')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'fichas'
-                  ? 'bg-emerald-500 text-black shadow-sm'
-                  : 'text-gray-300 hover:text-white hover:bg-emerald-500/10'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Fichas</span>
-            </button>
           </nav>
 
           {/* Right actions: Install button */}

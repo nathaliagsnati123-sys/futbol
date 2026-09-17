@@ -5,6 +5,14 @@ const COMPLETED_KEY = 'futbol_plus_completed';
 const TRAININGS_KEY = 'futbol_plus_trainings';
 const FICHAS_KEY = 'futbol_plus_fichas';
 
+function safeDispatchEvent(eventName: string): void {
+  if (typeof window !== 'undefined') {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent(eventName));
+    }, 0);
+  }
+}
+
 export function getStoredFavorites(): string[] {
   try {
     const data = localStorage.getItem(FAVORITES_KEY);
@@ -19,7 +27,7 @@ export function saveFavorite(id: string): void {
     const favs = getStoredFavorites();
     if (!favs.includes(id)) {
       localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favs, id]));
-      window.dispatchEvent(new CustomEvent('futbol_favorites_updated'));
+      safeDispatchEvent('futbol_favorites_updated');
     }
   } catch (err) {
     console.error('Error saving favorite', err);
@@ -30,7 +38,7 @@ export function removeFavorite(id: string): void {
   try {
     const favs = getStoredFavorites().filter((f) => f !== id);
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
-    window.dispatchEvent(new CustomEvent('futbol_favorites_updated'));
+    safeDispatchEvent('futbol_favorites_updated');
   } catch (err) {
     console.error('Error removing favorite', err);
   }
@@ -50,7 +58,7 @@ export function saveCompleted(id: string): void {
     const comp = getStoredCompleted();
     if (!comp.includes(id)) {
       localStorage.setItem(COMPLETED_KEY, JSON.stringify([...comp, id]));
-      window.dispatchEvent(new CustomEvent('futbol_completed_updated'));
+      safeDispatchEvent('futbol_completed_updated');
     }
   } catch (err) {
     console.error('Error saving completed', err);
@@ -61,7 +69,7 @@ export function removeCompleted(id: string): void {
   try {
     const comp = getStoredCompleted().filter((c) => c !== id);
     localStorage.setItem(COMPLETED_KEY, JSON.stringify(comp));
-    window.dispatchEvent(new CustomEvent('futbol_completed_updated'));
+    safeDispatchEvent('futbol_completed_updated');
   } catch (err) {
     console.error('Error removing completed', err);
   }
@@ -86,7 +94,7 @@ export function saveTraining(session: TrainingSession): void {
       all.unshift(session);
     }
     localStorage.setItem(TRAININGS_KEY, JSON.stringify(all));
-    window.dispatchEvent(new CustomEvent('futbol_trainings_updated'));
+    safeDispatchEvent('futbol_trainings_updated');
   } catch (err) {
     console.error('Error saving training session', err);
   }
@@ -96,7 +104,7 @@ export function deleteTraining(id: string): void {
   try {
     const all = getStoredTrainings().filter((t) => t.id !== id);
     localStorage.setItem(TRAININGS_KEY, JSON.stringify(all));
-    window.dispatchEvent(new CustomEvent('futbol_trainings_updated'));
+    safeDispatchEvent('futbol_trainings_updated');
   } catch (err) {
     console.error('Error deleting training', err);
   }
@@ -121,7 +129,7 @@ export function saveFicha(ficha: FichaTecnica): void {
       all.unshift(ficha);
     }
     localStorage.setItem(FICHAS_KEY, JSON.stringify(all));
-    window.dispatchEvent(new CustomEvent('futbol_fichas_updated'));
+    safeDispatchEvent('futbol_fichas_updated');
   } catch (err) {
     console.error('Error saving ficha', err);
   }
@@ -131,7 +139,7 @@ export function deleteFicha(id: string): void {
   try {
     const all = getStoredFichas().filter((f) => f.id !== id);
     localStorage.setItem(FICHAS_KEY, JSON.stringify(all));
-    window.dispatchEvent(new CustomEvent('futbol_fichas_updated'));
+    safeDispatchEvent('futbol_fichas_updated');
   } catch (err) {
     console.error('Error deleting ficha', err);
   }

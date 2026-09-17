@@ -8,7 +8,7 @@ import { ExerciseFilters } from './components/exercises/ExerciseFilters';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { TrainingView } from './components/training/TrainingView';
 import { BonusesView } from './components/bonuses/BonusesView';
-import { FichasView } from './components/sheets/FichasView';
+import { AddToTrainingModal } from './components/training/AddToTrainingModal';
 import { allExercises } from './data/exercises';
 import { Exercise, FilterState } from './types';
 import {
@@ -18,6 +18,7 @@ import {
   getStoredCompleted,
   saveCompleted,
   removeCompleted,
+  getStoredTrainings,
 } from './utils/storage';
 import {
   Heart,
@@ -36,8 +37,21 @@ export default function App() {
   const [favorites, setFavorites] = useState<string[]>(() => getStoredFavorites());
   const [completed, setCompleted] = useState<string[]>(() => getStoredCompleted());
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+  const [exerciseForTrainingModal, setExerciseForTrainingModal] = useState<Exercise | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [trainingsCount, setTrainingsCount] = useState<number>(() => {
+    const count = getStoredTrainings().length;
+    return count > 0 ? count : 2;
+  });
+
+  useEffect(() => {
+    const handleTrainingsUpdate = () => {
+      setTrainingsCount(getStoredTrainings().length);
+    };
+    window.addEventListener('futbol_trainings_updated', handleTrainingsUpdate);
+    return () => window.removeEventListener('futbol_trainings_updated', handleTrainingsUpdate);
+  }, []);
 
   // Filters state
   const [filters, setFilters] = useState<FilterState>({
@@ -118,8 +132,17 @@ export default function App() {
       }
 
       // Category filter
-      if (filters.category && ex.category !== filters.category) {
-        return false;
+      if (filters.category) {
+        const targetCat = filters.category.toLowerCase().trim();
+        const exCat = ex.category.toLowerCase().trim();
+        const matchesCategory =
+          exCat === targetCat ||
+          exCat.startsWith(targetCat) ||
+          exCat.includes(targetCat) ||
+          targetCat.includes(exCat);
+        if (!matchesCategory) {
+          return false;
+        }
       }
 
       // Objective filter
@@ -213,12 +236,41 @@ export default function App() {
             totalExercises={allExercises.length}
             completedCount={completed.length}
             favoritesCount={favorites.length}
+            trainingsCount={trainingsCount}
             featuredExercise={featuredExercise}
             setActiveTab={setActiveTab}
             onSelectExercise={setSelectedExercise}
             onSelectCategory={(catId) => {
-              setFilters((prev) => ({ ...prev, category: catId }));
+              setFilters({
+                searchQuery: '',
+                category: catId,
+                objective: '',
+                age: '',
+                level: '',
+                players: '',
+                duration: '',
+                intensity: '',
+                space: '',
+              });
+              setCurrentPage(1);
               setActiveTab('ejercicios');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onSearchQuery={(query) => {
+              setFilters({
+                searchQuery: query,
+                category: '',
+                objective: '',
+                age: '',
+                level: '',
+                players: '',
+                duration: '',
+                intensity: '',
+                space: '',
+              });
+              setCurrentPage(1);
+              setActiveTab('ejercicios');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
         )}
@@ -292,6 +344,10 @@ export default function App() {
                         handleToggleCompleted(exercise.id);
                       }}
                       onSelect={setSelectedExercise}
+                      onAddToTraining={(e, ex) => {
+                        e.stopPropagation();
+                        setExerciseForTrainingModal(ex);
+                      }}
                     />
                   ))}
                 </div>
@@ -398,6 +454,10 @@ export default function App() {
                       handleToggleCompleted(exercise.id);
                     }}
                     onSelect={setSelectedExercise}
+                    onAddToTraining={(e, ex) => {
+                      e.stopPropagation();
+                      setExerciseForTrainingModal(ex);
+                    }}
                   />
                 ))}
               </div>
@@ -411,12 +471,9 @@ export default function App() {
         )}
 
         {/* TAB 5: BONOS */}
-        {activeTab === 'bonos' && (
-          <BonusesView onGoToFichas={() => setActiveTab('fichas')} />
+        {(activeTab === 'bonos' || (activeTab as string) === 'fichas') && (
+          <BonusesView />
         )}
-
-        {/* TAB 6: FICHAS TÉCNICAS */}
-        {activeTab === 'fichas' && <FichasView />}
       </main>
 
       {/* Bottom Mobile Navigation */}
@@ -434,10 +491,17 @@ export default function App() {
         isCompleted={selectedExercise ? completed.includes(selectedExercise.id) : false}
         onToggleFavorite={handleToggleFavorite}
         onToggleCompleted={handleToggleCompleted}
-        onAddToTraining={() => {
-          setActiveTab('entrenamientos');
-          showToast('Abierto el planificador de entrenamientos');
+        onAddToTraining={(ex) => {
+          setExerciseForTrainingModal(ex);
         }}
+      />
+
+      {/* Add To Training Session Modal */}
+      <AddToTrainingModal
+        exercise={exerciseForTrainingModal}
+        isOpen={!!exerciseForTrainingModal}
+        onClose={() => setExerciseForTrainingModal(null)}
+        onSuccess={(msg) => showToast(msg)}
       />
     </div>
   );

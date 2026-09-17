@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, X, SlidersHorizontal, RotateCcw } from 'lucide-react';
+import { Search, X, SlidersHorizontal, RotateCcw } from 'lucide-react';
 import { FilterState } from '../../types';
 import { CATEGORIES_LIST } from '../../data/exercises';
 
@@ -75,42 +75,76 @@ export const ExerciseFilters: React.FC<Props> = ({
   };
 
   return (
-    <div className="space-y-3 bg-[#0a1710] p-4 sm:p-5 rounded-2xl border border-emerald-900/50 shadow-lg">
-      {/* Top Search Bar & Filter Toggle */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-        <div className="relative flex-1">
+    <div className="bg-[#0b1710] p-4 sm:p-5 rounded-2xl border border-emerald-900/60 shadow-lg space-y-3.5">
+      {/* Primary Row: Search Bar & Core Selectors */}
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
+        {/* Search */}
+        <div className="relative sm:col-span-6 lg:col-span-5">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400" />
           <input
             type="text"
             value={filters.searchQuery}
             onChange={(e) => setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))}
-            placeholder="Buscar por nombre, objetivo, táctica, tags (ej: rondo, desmarque, 1v1)..."
-            className="w-full pl-10 pr-10 py-2.5 bg-[#06110a] border border-emerald-900/60 rounded-xl text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+            placeholder="Buscar por ID (ej: 001), nombre, objetivo o tags..."
+            className="w-full pl-10 pr-9 py-2 bg-[#06110a] border border-emerald-900/70 rounded-xl text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 transition"
           />
           {filters.searchQuery && (
             <button
               onClick={() => setFilters((prev) => ({ ...prev, searchQuery: '' }))}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Category Dropdown */}
+        <div className="sm:col-span-3 lg:col-span-3">
+          <select
+            value={filters.category}
+            onChange={(e) => setFilters((prev) => ({ ...prev, category: e.target.value }))}
+            className="w-full py-2 px-3 bg-[#06110a] border border-emerald-900/70 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+          >
+            <option value="">Todas las Categorías (16)</option>
+            {CATEGORIES_LIST.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name} ({cat.count})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Level Dropdown */}
+        <div className="sm:col-span-3 lg:col-span-2">
+          <select
+            value={filters.level}
+            onChange={(e) => setFilters((prev) => ({ ...prev, level: e.target.value }))}
+            className="w-full py-2 px-3 bg-[#06110a] border border-emerald-900/70 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+          >
+            <option value="">Todos los niveles</option>
+            {LEVELS.map((lvl) => (
+              <option key={lvl} value={lvl}>
+                {lvl}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Filter Toggle & Reset Actions */}
+        <div className="sm:col-span-12 lg:col-span-2 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className={`flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold border transition ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition ${
               showAdvanced || hasActiveFilters
                 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                 : 'bg-[#06110a] text-gray-300 border-emerald-900/60 hover:border-emerald-700'
             }`}
           >
             <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Filtros avanzados</span>
+            <span>Filtros</span>
             {hasActiveFilters && (
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
             )}
           </button>
 
@@ -119,53 +153,17 @@ export const ExerciseFilters: React.FC<Props> = ({
               type="button"
               onClick={resetFilters}
               title="Restablecer todos los filtros"
-              className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900/40 text-xs font-semibold transition"
+              className="flex items-center justify-center p-2 rounded-xl bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900/40 text-xs transition"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Limpiar</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Category Pills Slider */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-thin pt-1">
-        <button
-          type="button"
-          onClick={() => setFilters((prev) => ({ ...prev, category: '' }))}
-          className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap ${
-            !filters.category
-              ? 'bg-emerald-500 text-black shadow-sm'
-              : 'bg-[#06110a] text-gray-300 hover:text-white border border-emerald-950 hover:border-emerald-800'
-          }`}
-        >
-          Todas las Categorías (1.000)
-        </button>
-
-        {CATEGORIES_LIST.map((cat) => (
-          <button
-            key={cat.id}
-            type="button"
-            onClick={() =>
-              setFilters((prev) => ({
-                ...prev,
-                category: prev.category === cat.id ? '' : cat.id,
-              }))
-            }
-            className={`shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
-              filters.category === cat.id
-                ? 'bg-emerald-500 text-black font-semibold shadow-sm'
-                : 'bg-[#06110a] text-gray-300 hover:text-white border border-emerald-950 hover:border-emerald-800'
-            }`}
-          >
-            {cat.name} <span className="opacity-60 text-[10px]">({cat.count})</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Advanced Collapsible Filter Panel */}
+      {/* Advanced Collapsible Filters */}
       {showAdvanced && (
-        <div className="pt-3 border-t border-emerald-900/40 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 text-xs animate-fadeIn">
+        <div className="pt-3 border-t border-emerald-900/40 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs animate-fadeIn">
           {/* Objetivo */}
           <div className="space-y-1">
             <label className="text-[10px] uppercase font-bold text-gray-400 block">Objetivo</label>
@@ -195,23 +193,6 @@ export const ExerciseFilters: React.FC<Props> = ({
               {AGES.map((age) => (
                 <option key={age} value={age}>
                   {age}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Nivel */}
-          <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-gray-400 block">Nivel</label>
-            <select
-              value={filters.level}
-              onChange={(e) => setFilters((prev) => ({ ...prev, level: e.target.value }))}
-              className="w-full py-1.5 px-2 bg-[#06110a] border border-emerald-900/60 rounded-lg text-xs text-gray-200 focus:outline-none focus:border-emerald-500"
-            >
-              <option value="">Todos los niveles</option>
-              {LEVELS.map((lvl) => (
-                <option key={lvl} value={lvl}>
-                  {lvl}
                 </option>
               ))}
             </select>
@@ -287,13 +268,13 @@ export const ExerciseFilters: React.FC<Props> = ({
         </div>
       )}
 
-      {/* Results summary counter */}
-      <div className="flex items-center justify-between text-xs text-gray-400 pt-1">
+      {/* Results Bar */}
+      <div className="flex items-center justify-between text-xs text-gray-400 pt-1 border-t border-emerald-950">
         <span>
-          Mostrando <strong className="text-emerald-400 font-bold">{totalMatches}</strong> de {totalExercises} ejercicios
+          Mostrando <strong className="text-white font-bold">{totalMatches}</strong> de {totalExercises} ejercicios
         </span>
         {hasActiveFilters && (
-          <span className="text-[11px] text-emerald-400/80">Filtros activos aplicados</span>
+          <span className="text-[11px] text-emerald-400">Filtros activos aplicados</span>
         )}
       </div>
     </div>

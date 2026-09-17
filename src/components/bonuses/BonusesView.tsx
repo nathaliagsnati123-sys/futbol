@@ -32,9 +32,10 @@ import {
   PLAN_30_DIAS,
   PREPARACION_FISICA_INTEGRAL,
 } from '../../data/bonuses';
+import { FichasView } from '../sheets/FichasView';
 
 interface Props {
-  onGoToFichas: () => void;
+  onGoToFichas?: () => void;
 }
 
 export const BonusesView: React.FC<Props> = ({ onGoToFichas }) => {
@@ -81,7 +82,7 @@ export const BonusesView: React.FC<Props> = ({ onGoToFichas }) => {
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white">
-              Los 10 Bônus Profesionales de FÚTBOL+
+              Los 10 Bonos Profesionales de FÚTBOL+
             </h2>
             <p className="text-xs sm:text-sm text-gray-300 max-w-2xl">
               Manuales metodológicos, preparación física integral, sesiones preconfiguradas, ejercicios tácticos y técnicos avanzados, programa de velocidad y calendario de 30 días.
@@ -90,7 +91,7 @@ export const BonusesView: React.FC<Props> = ({ onGoToFichas }) => {
 
           <div className="bg-[#051109] px-4 py-3 rounded-xl border border-emerald-900/60 shrink-0 text-center">
             <span className="text-xs text-gray-400 block font-medium">Acceso Total</span>
-            <span className="text-lg font-black text-emerald-400">10 Bônus Pro</span>
+            <span className="text-lg font-black text-emerald-400">10 Bonos Pro</span>
           </div>
         </div>
       </div>
@@ -102,13 +103,7 @@ export const BonusesView: React.FC<Props> = ({ onGoToFichas }) => {
           {BONUSES_METADATA.map((bonus) => (
             <div
               key={bonus.id}
-              onClick={() => {
-                if (bonus.id === 9) {
-                  onGoToFichas();
-                } else {
-                  setActiveBonusId(bonus.id);
-                }
-              }}
+              onClick={() => setActiveBonusId(bonus.id)}
               className="group relative flex flex-col justify-between rounded-2xl bg-[#09170f] border border-emerald-900/40 p-5 hover:border-emerald-500/50 hover:bg-[#0c1f14] transition-all duration-200 cursor-pointer shadow-lg hover:shadow-emerald-950/40"
             >
               <div>
@@ -577,6 +572,13 @@ export const BonusesView: React.FC<Props> = ({ onGoToFichas }) => {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Render Bono 10: Plantillas y Fichas Técnicas */}
+          {activeBonusId === 9 && (
+            <div className="space-y-4">
+              <FichasView />
             </div>
           )}
         </div>
