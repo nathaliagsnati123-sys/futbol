@@ -197,79 +197,133 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
     return () => window.removeEventListener('futbol_trainings_updated', handleUpdate);
   }, [selectedSession]);
 
-  // Intelligent Session Generator based on Pedagogical 4-phase architecture
+  // Intelligent Session Generator based on Pedagogical architecture & rigorous criteria
   const handleGenerateSession = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const usedIds = new Set<string>();
+
+    // Parse numeric player count from select
+    let playersNum = 14;
+    if (genPlayers.includes('8')) playersNum = 10;
+    else if (genPlayers.includes('12')) playersNum = 12;
+    else if (genPlayers.includes('14') || genPlayers.includes('16')) playersNum = 16;
+    else if (genPlayers.includes('18') || genPlayers.includes('20')) playersNum = 20;
+
+    const sessionDurationTotal = parseInt(genDuration, 10) || 75;
+    const isShort = sessionDurationTotal <= 60;
+
+    // Age scoring matrix for strict pedagogical compatibility
+    const getAgeScore = (exAge: string, targetAge: string): number => {
+      if (exAge === targetAge) return 30;
+      if (targetAge === '6–8 años') return exAge === '9–11 años' ? 5 : -60;
+      if (targetAge === '9–11 años') return exAge === '6–8 años' || exAge === '12–14 años' ? 10 : -25;
+      if (targetAge === '12–14 años') return exAge === '9–11 años' || exAge === '15–17 años' ? 10 : -15;
+      if (targetAge === '15–17 años') return exAge === 'Adultos' || exAge === '12–14 años' ? 15 : -30;
+      if (targetAge === 'Adultos') return exAge === '15–17 años' ? 15 : -50;
+      return 0;
+    };
+
+    // Scored exercise picker ensuring uniqueness and best match
+    const pickBest = (
+      pool: Exercise[],
+      preferObjective: boolean = false,
+      isCooldown: boolean = false
+    ): Exercise => {
+      // 1. Never reuse already picked exercise IDs in this session
+      let available = pool.filter((ex) => !usedIds.has(ex.id));
+      if (available.length === 0) available = pool;
+
+      // 2. Strict exact-age filter when sufficient candidates exist
+      const exactAgeList = available.filter((ex) => ex.edad === genAge);
+      const candidateList = exactAgeList.length >= 2 ? exactAgeList : available;
+
+      const scored = candidateList.map((ex) => {
+        let score = 0;
+        score += getAgeScore(ex.edad, genAge);
+        if (ex.nivel === genLevel) score += 10;
+
+        // Player count capacity check
+        if (ex.jugadoresMin > playersNum) score -= 15;
+
+        // Semantic objective matching
+        if (preferObjective) {
+          const norm = genObjective.toLowerCase();
+          const words = norm.split(' ').filter((w) => w.length > 3);
+          if (ex.name.toLowerCase().includes(norm)) score += 35;
+          if (ex.category.toLowerCase().includes(norm)) score += 25;
+          if (ex.objetivoPrincipal.toLowerCase().includes(norm)) score += 20;
+          if (ex.tags.some((t) => t.toLowerCase().includes(norm))) score += 15;
+          for (const w of words) {
+            if (ex.name.toLowerCase().includes(w)) score += 8;
+            if (ex.objetivoPrincipal.toLowerCase().includes(w)) score += 5;
+          }
+        }
+
+        // Cool-down specific scoring
+        if (isCooldown) {
+          if (ex.intensidad === 'Baja') score += 35;
+          if (ex.subcategory.toLowerCase().includes('movilidad')) score += 25;
+          if (ex.category.includes('Calentamiento')) score += 10;
+        }
+
+        return { ex, score };
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      const bestScore = scored[0].score;
+      const topCandidates = scored.filter((s) => s.score >= bestScore - 5);
+      const chosen = topCandidates[Math.floor(Math.random() * topCandidates.length)].ex;
+      usedIds.add(chosen.id);
+      return chosen;
+    };
 
     // 1. Calentamiento pool
     const warmupPool = allExercises.filter(
       (ex) =>
         ex.category.includes('Calentamiento') ||
-        ex.category.includes('Rondos') ||
+        (genAge === '6–8 años' && ex.category.includes('Fútbol Base')) ||
+        ex.subcategory.toLowerCase().includes('movilidad') ||
         ex.subcategory.toLowerCase().includes('dinámica')
     );
+    const exWarmup = pickBest(warmupPool);
 
-    // 2. Parte Principal: Filter intelligently by chosen objective, age, and level
-    const normObj = genObjective.toLowerCase();
-    const mainPool = allExercises.filter((ex) => {
-      const matchesObj =
-        ex.name.toLowerCase().includes(normObj) ||
-        ex.objetivoPrincipal.toLowerCase().includes(normObj) ||
-        ex.objetivoTecnico.toLowerCase().includes(normObj) ||
-        ex.category.toLowerCase().includes(normObj) ||
-        ex.tags.some((t) => t.toLowerCase().includes(normObj));
-      return matchesObj;
-    });
+    // 2. Parte Principal Técnica (Objective focused)
+    const exMainTech = pickBest(allExercises, true);
 
-    // Fallback pools if specific mainPool is small
-    const techPool = mainPool.length >= 3 ? mainPool : allExercises.filter(
-      (ex) =>
-        ex.category.includes('Pase') ||
-        ex.category.includes('Finalización') ||
-        ex.category.includes('Regate') ||
-        ex.category.includes('Técnica')
-    );
-
+    // 3. Parte Principal Táctica / Transición / Posición
     const tacticalPool = allExercises.filter(
       (ex) =>
         ex.category.includes('Táctica') ||
         ex.category.includes('Ataque') ||
         ex.category.includes('Defensa') ||
-        ex.category.includes('Transición') ||
-        ex.category.includes('Posición')
+        ex.category.includes('Transiciones') ||
+        ex.category.includes('Pase y Recepción') ||
+        (genAge === '6–8 años' && ex.category.includes('Fútbol Base'))
     );
+    const exMainTact = pickBest(tacticalPool);
 
-    // 3. Aplicación / Juego reducido
+    // 4. Juego reducido / Aplicación real / Duelos
     const gamePool = allExercises.filter(
       (ex) =>
+        ex.category.includes('Colectivos') ||
+        ex.category.includes('Regate') ||
         ex.category.includes('Reducidos') ||
-        ex.category.includes('Posición') ||
-        ex.category.includes('Presión') ||
+        ex.name.toLowerCase().includes('juego') ||
         ex.name.toLowerCase().includes('partido') ||
-        ex.name.toLowerCase().includes('juego')
+        ex.name.toLowerCase().includes('duelo') ||
+        (genAge === '6–8 años' && ex.category.includes('Fútbol Base'))
     );
+    const exGame = pickBest(gamePool);
 
-    // 4. Vuelta a la calma
+    // 5. Vuelta a la calma (strict low intensity, regenerative mobility, gentle breathing)
     const coolDownPool = allExercises.filter(
       (ex) =>
-        ex.category.includes('Calentamiento') ||
-        ex.subcategory.toLowerCase().includes('movilidad') ||
-        ex.intensidad === 'Baja'
+        (ex.intensidad === 'Baja' || ex.subcategory.toLowerCase().includes('movilidad')) &&
+        !ex.category.includes('Colectivos') &&
+        !ex.category.includes('Transiciones')
     );
-
-    const pickRandom = (pool: Exercise[], fallbackIdx: number): Exercise => {
-      if (pool.length === 0) return allExercises[fallbackIdx % allExercises.length];
-      return pool[Math.floor(Math.random() * pool.length)];
-    };
-
-    const exWarmup = pickRandom(warmupPool, 5);
-    const exMainTech = pickRandom(techPool, 110);
-    const exMainTact = pickRandom(tacticalPool, 320);
-    const exGame = pickRandom(gamePool, 450);
-    const exCool = pickRandom(coolDownPool, 980);
-
-    const sessionDurationTotal = parseInt(genDuration, 10) || 75;
-    const isShort = sessionDurationTotal <= 60;
+    const exCool = pickBest(coolDownPool, false, true);
 
     const exercisesList: TrainingPhaseItem[] = isShort
       ? [
