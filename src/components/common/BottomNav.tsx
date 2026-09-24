@@ -14,7 +14,7 @@ export const BottomNav: React.FC<Props> = ({
   favoritesCount,
 }) => {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#08140d]/95 backdrop-blur-lg border-t border-emerald-900/60 safe-area-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#08140d]/95 backdrop-blur-lg border-t border-emerald-900/60 safe-area-bottom print:hidden">
       <div className="grid grid-cols-5 h-15">
         <button
           type="button"

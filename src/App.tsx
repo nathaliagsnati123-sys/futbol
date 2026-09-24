@@ -209,7 +209,7 @@ export default function App() {
   const featuredExercise = allExercises[0];
 
   return (
-    <div className="min-h-screen bg-[#050e08] text-gray-100 flex flex-col selection:bg-emerald-500 selection:text-black font-sans">
+    <div className="min-h-screen bg-[#050e08] text-gray-100 flex flex-col selection:bg-emerald-500 selection:text-black font-sans print:bg-white print:text-black print:min-h-0 print:h-auto">
       <OfflineIndicator />
 
       {/* Main App Header */}
@@ -222,14 +222,14 @@ export default function App() {
 
       {/* Floating Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-4 z-50 bg-emerald-500 text-black px-4 py-2.5 rounded-xl font-bold text-xs shadow-2xl shadow-emerald-950/60 flex items-center gap-2 border border-emerald-300 animate-bounce">
+        <div className="fixed top-20 right-4 z-50 bg-emerald-500 text-black px-4 py-2.5 rounded-xl font-bold text-xs shadow-2xl shadow-emerald-950/60 flex items-center gap-2 border border-emerald-300 animate-bounce print:hidden">
           <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Main View Switcher */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 md:pb-12">
+      <main className={`flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 md:pb-12 ${selectedExercise ? 'print:hidden' : ''}`}>
         {/* TAB 1: INICIO (Dashboard) */}
         {activeTab === 'inicio' && (
           <DashboardView

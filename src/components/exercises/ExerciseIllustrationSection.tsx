@@ -51,24 +51,24 @@ export const ExerciseIllustrationSection: React.FC<Props> = ({ exercise }) => {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 print:space-y-3 print-break-inside-avoid">
       {/* Header Bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 print:bg-emerald-100 print:text-emerald-900 print:border-emerald-300">
             <Layers className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400 print:text-emerald-950">
               Pizarra Táctica Ilustrada del Ejercicio
             </h4>
-            <p className="text-[11px] text-gray-400">
+            <p className="text-[11px] text-gray-400 print:text-gray-600">
               Diagrama vectorial interactivo reglamentario ({exercise.espacio})
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 print:hidden">
           <button
             type="button"
             onClick={() => setIsZoomed(!isZoomed)}
@@ -96,36 +96,38 @@ export const ExerciseIllustrationSection: React.FC<Props> = ({ exercise }) => {
       </div>
 
       {/* Visual Step Sequence Guide */}
-      <div className="space-y-2 pt-2">
+      <div className="space-y-2 pt-2 print:pt-1">
         <div className="flex items-center justify-between">
-          <h5 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
-            <Footprints className="w-3.5 h-3.5 text-emerald-400" />
+          <h5 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5 print:text-black">
+            <Footprints className="w-3.5 h-3.5 text-emerald-400 print:text-emerald-800" />
             <span>Fases Gráficas del Desarrollo</span>
           </h5>
-          <span className="text-[10px] text-emerald-400 font-mono bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+          <span className="text-[10px] text-emerald-400 font-mono bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 print:bg-emerald-50 print:text-emerald-900 print:border-emerald-300">
             3 Fases Guiadas
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 print:grid-cols-3 print:gap-2">
           {phases.map((phase) => (
             <div
               key={phase.num}
-              className="p-3 rounded-xl bg-[#09160f] border border-emerald-900/40 space-y-1.5 hover:border-emerald-700/60 transition"
+              className="p-3 rounded-xl bg-[#09160f] border border-emerald-900/40 space-y-1.5 hover:border-emerald-700/60 transition print:bg-gray-50 print:border-gray-300 print:p-2.5"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   {phase.icon}
-                  <span className="text-[11px] font-bold text-white line-clamp-1">{phase.title}</span>
+                  <span className="text-[11px] font-bold text-white line-clamp-1 print:text-black print:line-clamp-none">
+                    {phase.title}
+                  </span>
                 </div>
-                <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold flex items-center justify-center shrink-0">
+                <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold flex items-center justify-center shrink-0 print:bg-emerald-100 print:text-emerald-900 print:border print:border-emerald-300">
                   {phase.num}
                 </span>
               </div>
-              <p className="text-[11px] text-gray-300 line-clamp-3 leading-relaxed">
+              <p className="text-[11px] text-gray-300 line-clamp-3 leading-relaxed print:text-gray-800 print:line-clamp-none">
                 {phase.desc}
               </p>
-              <span className="inline-block text-[9px] uppercase tracking-wider font-semibold text-emerald-400/90 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-900/40">
+              <span className="inline-block text-[9px] uppercase tracking-wider font-semibold text-emerald-400/90 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-900/40 print:bg-emerald-50 print:text-emerald-900 print:border-emerald-300">
                 {phase.badge}
               </span>
             </div>

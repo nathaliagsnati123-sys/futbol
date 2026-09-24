@@ -19,11 +19,13 @@ export const PitchDiagram: React.FC<Props> = ({
   const { type, elements } = diagram;
 
   return (
-    <div className={`relative overflow-hidden rounded-xl border border-emerald-500/30 bg-[#072113] shadow-inner select-none ${className}`}>
+    <div
+      className={`pitch-diagram-container relative overflow-hidden rounded-xl border border-emerald-500/30 bg-[#072113] shadow-inner select-none print:border-gray-300 print:shadow-none print-break-inside-avoid ${className}`}
+    >
       {/* SVG Tactical Pitch */}
       <svg
         viewBox="0 0 400 280"
-        className="w-full h-auto max-h-[360px] block"
+        className="w-full h-auto max-h-[360px] print:max-h-[240px] block"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -284,27 +286,27 @@ export const PitchDiagram: React.FC<Props> = ({
 
       {/* Legend bar */}
       {showLegend && (
-        <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#06180e] border-t border-emerald-900/40 text-[10px] text-gray-300">
+        <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#06180e] border-t border-emerald-900/40 text-[10px] text-gray-300 print:bg-gray-100 print:border-gray-300 print:text-gray-900 font-medium">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="flex items-center gap-1">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-emerald-700 inline-block" />
-              <span>Ataque / Posesión</span>
+              <span className="print:text-black">Ataque / Posesión</span>
             </span>
             <span className="flex items-center gap-1">
               <span className="w-2.5 h-2.5 rounded-full bg-red-500 border border-red-700 inline-block" />
-              <span>Defensa / Oposición</span>
+              <span className="print:text-black">Defensa / Oposición</span>
             </span>
             <span className="flex items-center gap-1">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 border border-cyan-700 inline-block" />
-              <span>Portero</span>
+              <span className="print:text-black">Portero</span>
             </span>
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-white border border-black inline-block" />
-              <span>Balón</span>
+              <span className="print:text-black">Balón</span>
             </span>
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap text-gray-400">
+          <div className="flex items-center gap-3 flex-wrap text-gray-400 print:text-gray-800">
             <span className="flex items-center gap-1">
               <span className="w-3 h-0.5 bg-yellow-400 border-b border-dashed inline-block" />
               <span>Pase</span>

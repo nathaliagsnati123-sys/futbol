@@ -18,7 +18,7 @@ export const Header: React.FC<Props> = ({
   completedCount,
 }) => {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-emerald-900/50 bg-[#09150e]/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-emerald-900/50 bg-[#09150e]/95 backdrop-blur-md print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-18 gap-2">
           {/* Logo & Slogan */}

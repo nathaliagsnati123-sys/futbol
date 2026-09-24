@@ -551,7 +551,7 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
       )}
 
       {/* Top Banner & Control Actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0a1810] p-5 sm:p-6 rounded-2xl border border-emerald-900/50 shadow-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0a1810] p-5 sm:p-6 rounded-2xl border border-emerald-900/50 shadow-md print:hidden">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400">
@@ -588,9 +588,9 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
       </div>
 
       {/* Main Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 print:block">
         {/* Left Column: Saved Sessions List */}
-        <div className="lg:col-span-4 space-y-3">
+        <div className="lg:col-span-4 space-y-3 print:hidden">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
               <FileText className="w-4 h-4" />
@@ -666,39 +666,63 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
         </div>
 
         {/* Right Column: Selected Session Command Center */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-8 print:w-full print:max-w-none print:col-span-12 print:block">
           {selectedSession ? (
-            <div className="bg-[#09150e] rounded-2xl border border-emerald-900/50 p-5 sm:p-6 space-y-6 shadow-xl">
+            <div className="bg-[#09150e] rounded-2xl border border-emerald-900/50 p-5 sm:p-6 space-y-6 shadow-xl print:bg-white print:border-none print:p-0 print:shadow-none print:space-y-4">
+              {/* Official Printable Session Header (Visible on Paper / Print Only) */}
+              <div className="hidden print:block border-b-2 border-emerald-800 pb-3 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-800 text-white flex items-center justify-center font-black text-base">
+                      ⚽+
+                    </div>
+                    <div>
+                      <h1 className="text-base font-black uppercase tracking-wider text-emerald-950">
+                        FÚTBOL+ • PLANILLA DE SESIÓN DE ENTRENAMIENTO
+                      </h1>
+                      <p className="text-[10px] text-gray-600 font-medium">
+                        Planificación Metodológica de Campo • 1.000 Ejercicios
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right text-[11px] text-gray-700">
+                    <p className="font-bold text-black text-sm">{selectedSession.title}</p>
+                    <p>Fecha: {selectedSession.date} • Duración: {calculateTotalMinutes(selectedSession.exercises)} min</p>
+                    <p className="text-[10px] text-emerald-800 font-semibold">{selectedSession.ageGroup} • Nivel {selectedSession.level}</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Header Info */}
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-emerald-900/50">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-emerald-900/50 print:border-b print:border-gray-300 print:pb-3">
                 <div className="space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs text-emerald-400 font-semibold flex-wrap">
-                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                  <div className="flex items-center gap-2 text-xs text-emerald-400 font-semibold flex-wrap print:text-black">
+                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 print:bg-gray-100 print:border-gray-300 print:text-black">
                       📅 {selectedSession.date}
                     </span>
-                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 text-emerald-300 font-bold">
+                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 text-emerald-300 font-bold print:bg-emerald-50 print:border-emerald-300 print:text-emerald-900">
                       ⏱️ Total: {calculateTotalMinutes(selectedSession.exercises)} min ({selectedSession.exercises.length} tareas)
                     </span>
-                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 print:bg-gray-100 print:border-gray-300 print:text-black">
                       👥 {selectedSession.playersCount}
                     </span>
-                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                    <span className="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 print:bg-gray-100 print:border-gray-300 print:text-black">
                       🎯 {selectedSession.ageGroup} • {selectedSession.level}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-extrabold text-white">
+                  <h3 className="text-xl font-extrabold text-white print:text-2xl print:text-black print:font-black">
                     {selectedSession.title}
                   </h3>
 
-                  <p className="text-xs text-gray-300 flex items-center gap-1.5">
-                    <Target className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <p className="text-xs text-gray-300 flex items-center gap-1.5 print:text-gray-800">
+                    <Target className="w-3.5 h-3.5 text-emerald-400 shrink-0 print:text-emerald-800" />
                     <span><strong>Objetivo:</strong> {selectedSession.objective}</span>
                   </p>
                 </div>
 
                 {/* Session Actions Toolbar */}
-                <div className="flex items-center gap-2 flex-wrap shrink-0">
+                <div className="flex items-center gap-2 flex-wrap shrink-0 print:hidden">
                   <button
                     type="button"
                     onClick={() => setIsEditSessionOpen(true)}
@@ -741,9 +765,9 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
               </div>
 
               {/* Step by step training exercises list */}
-              <div className="space-y-4">
+              <div className="space-y-4 print:space-y-3">
                 <div className="flex items-center justify-between flex-wrap gap-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 print:text-emerald-950">
                     <Layers className="w-4 h-4" />
                     <span>Secuencia Metodológica de Tareas</span>
                   </h4>
@@ -751,7 +775,7 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
                   <button
                     type="button"
                     onClick={() => setIsAddExerciseModalOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs shadow transition"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs shadow transition print:hidden"
                   >
                     <Plus className="w-3.5 h-3.5 stroke-[3]" />
                     <span>Agregar Ejercicio a la Sesión</span>
@@ -759,100 +783,102 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
                 </div>
 
                 {selectedSession.exercises.length === 0 ? (
-                  <div className="p-8 text-center bg-[#07130b] rounded-xl border border-dashed border-emerald-900 text-gray-400 space-y-2">
-                    <p className="text-xs font-semibold text-white">Esta sesión no contiene ejercicios todavía.</p>
+                  <div className="p-8 text-center bg-[#07130b] rounded-xl border border-dashed border-emerald-900 text-gray-400 space-y-2 print:bg-white print:border-gray-300 print:text-black">
+                    <p className="text-xs font-semibold text-white print:text-black">Esta sesión no contiene ejercicios todavía.</p>
                     <p className="text-[11px]">Haz clic en el botón verde arriba para seleccionar tareas de la biblioteca de 1.000.</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-3 print:space-y-3">
                     {selectedSession.exercises.map((item, idx) => (
                       <div
                         key={idx}
-                        className="p-3.5 rounded-xl bg-[#0d1f14] border border-emerald-900/50 hover:border-emerald-700/60 transition space-y-2.5"
+                        className="p-3.5 rounded-xl bg-[#0d1f14] border border-emerald-900/50 hover:border-emerald-700/60 transition space-y-2.5 print:bg-white print:border-gray-300 print:text-black print:p-3 print:space-y-2 print-break-inside-avoid shadow-none"
                       >
                         {/* Phase Header with reorder controls */}
                         <div className="flex items-center justify-between gap-2 flex-wrap">
                           <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-emerald-500 text-black font-black text-xs flex items-center justify-center shrink-0">
+                            <span className="w-6 h-6 rounded-full bg-emerald-500 text-black font-black text-xs flex items-center justify-center shrink-0 print:bg-emerald-100 print:text-emerald-950 print:border print:border-emerald-300">
                               {idx + 1}
                             </span>
-                            <span className="font-bold text-xs text-white uppercase tracking-wide">
+                            <span className="font-bold text-xs text-white uppercase tracking-wide print:text-black">
                               {item.phase}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] text-emerald-300 bg-[#06120b] border border-emerald-950 px-2 py-0.5 rounded-md font-mono font-bold">
+                            <span className="text-[11px] text-emerald-300 bg-[#06120b] border border-emerald-950 px-2 py-0.5 rounded-md font-mono font-bold print:bg-gray-100 print:border-gray-300 print:text-black">
                               ⏱️ {item.duration}
                             </span>
 
-                            {/* Move Up */}
-                            <button
-                              type="button"
-                              onClick={() => handleMoveExercise(idx, 'up')}
-                              disabled={idx === 0}
-                              title="Subir tarea en la secuencia"
-                              className="p-1.5 rounded-md text-gray-400 hover:text-white bg-[#06120b] border border-emerald-950 disabled:opacity-30 transition"
-                            >
-                              <ArrowUp className="w-3 h-3" />
-                            </button>
+                            <div className="flex items-center gap-1.5 print:hidden">
+                              {/* Move Up */}
+                              <button
+                                type="button"
+                                onClick={() => handleMoveExercise(idx, 'up')}
+                                disabled={idx === 0}
+                                title="Subir tarea en la secuencia"
+                                className="p-1.5 rounded-md text-gray-400 hover:text-white bg-[#06120b] border border-emerald-950 disabled:opacity-30 transition"
+                              >
+                                <ArrowUp className="w-3 h-3" />
+                              </button>
 
-                            {/* Move Down */}
-                            <button
-                              type="button"
-                              onClick={() => handleMoveExercise(idx, 'down')}
-                              disabled={idx === selectedSession.exercises.length - 1}
-                              title="Bajar tarea en la secuencia"
-                              className="p-1.5 rounded-md text-gray-400 hover:text-white bg-[#06120b] border border-emerald-950 disabled:opacity-30 transition"
-                            >
-                              <ArrowDown className="w-3 h-3" />
-                            </button>
+                              {/* Move Down */}
+                              <button
+                                type="button"
+                                onClick={() => handleMoveExercise(idx, 'down')}
+                                disabled={idx === selectedSession.exercises.length - 1}
+                                title="Bajar tarea en la secuencia"
+                                className="p-1.5 rounded-md text-gray-400 hover:text-white bg-[#06120b] border border-emerald-950 disabled:opacity-30 transition"
+                              >
+                                <ArrowDown className="w-3 h-3" />
+                              </button>
 
-                            {/* Swap random */}
-                            <button
-                              type="button"
-                              onClick={() => handleSwapExercise(idx)}
-                              title="Reemplazar por otro ejercicio aleatorio coherente"
-                              className="p-1.5 rounded-md text-gray-400 hover:text-emerald-400 bg-[#06120b] border border-emerald-950 transition"
-                            >
-                              <RefreshCw className="w-3 h-3" />
-                            </button>
+                              {/* Swap random */}
+                              <button
+                                type="button"
+                                onClick={() => handleSwapExercise(idx)}
+                                title="Reemplazar por otro ejercicio aleatorio coherente"
+                                className="p-1.5 rounded-md text-gray-400 hover:text-emerald-400 bg-[#06120b] border border-emerald-950 transition"
+                              >
+                                <RefreshCw className="w-3 h-3" />
+                              </button>
 
-                            {/* Remove */}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveExercise(idx)}
-                              title="Eliminar de esta sesión"
-                              className="p-1.5 rounded-md text-red-400 hover:text-red-300 bg-[#160b0b] border border-red-950 transition"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
+                              {/* Remove */}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveExercise(idx)}
+                                title="Eliminar de esta sesión"
+                                className="p-1.5 rounded-md text-red-400 hover:text-red-300 bg-[#160b0b] border border-red-950 transition"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
                           </div>
                         </div>
 
                         {/* Exercise Card Summary with Thumbnail */}
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#08150e] p-3 rounded-lg border border-emerald-950">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#08150e] p-3 rounded-lg border border-emerald-950 print:bg-gray-50 print:border-gray-200 print:text-black">
                           <div className="flex items-center gap-3 w-full sm:w-auto">
-                            <div className="w-20 shrink-0 hidden sm:block">
+                            <div className="w-20 shrink-0 hidden sm:block print:block print:w-24">
                               <PitchThumbnail
                                 diagram={getExercisePitchDiagram(item.exercise)}
-                                className="w-20 rounded border border-emerald-900/60"
+                                className="w-20 print:w-24 rounded border border-emerald-900/60 print:border-gray-300"
                               />
                             </div>
 
                             <div className="space-y-0.5 flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800">
+                                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800 print:bg-emerald-100 print:text-emerald-950 print:border-emerald-300">
                                   {item.exercise.id}
                                 </span>
-                                <span className="text-xs font-bold text-white truncate">
+                                <span className="text-xs font-bold text-white truncate print:text-black">
                                   {item.exercise.name}
                                 </span>
                               </div>
-                              <p className="text-[11px] text-gray-400 line-clamp-1">
+                              <p className="text-[11px] text-gray-400 line-clamp-1 print:text-gray-800 print:line-clamp-none">
                                 {item.exercise.objetivoPrincipal}
                               </p>
-                              <div className="flex items-center gap-2 text-[10px] text-gray-400 pt-0.5">
+                              <div className="flex items-center gap-2 text-[10px] text-gray-400 pt-0.5 print:text-gray-700">
                                 <span>👥 {item.exercise.jugadoresLabel} jug.</span>
                                 <span>• 📍 {item.exercise.espacio}</span>
                                 <span>• ⚡ {item.exercise.intensidad}</span>
@@ -863,7 +889,7 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
                           <button
                             type="button"
                             onClick={() => onSelectExercise(item.exercise)}
-                            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold hover:bg-emerald-500/30 transition shrink-0 w-full sm:w-auto"
+                            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold hover:bg-emerald-500/30 transition shrink-0 w-full sm:w-auto print:hidden"
                           >
                             <Eye className="w-3.5 h-3.5" />
                             <span>Ver Ficha</span>
@@ -877,13 +903,19 @@ export const TrainingView: React.FC<Props> = ({ onSelectExercise }) => {
 
               {/* Coaching Notes */}
               {selectedSession.notes && (
-                <div className="bg-[#07130b] p-4 rounded-xl border border-emerald-900/40 text-xs text-gray-300 space-y-1">
-                  <span className="font-bold text-emerald-400 uppercase text-[10px] block">
+                <div className="bg-[#07130b] p-4 rounded-xl border border-emerald-900/40 text-xs text-gray-300 space-y-1 print:bg-gray-50 print:border-gray-300 print:text-gray-800 print-break-inside-avoid">
+                  <span className="font-bold text-emerald-400 uppercase text-[10px] block print:text-emerald-950">
                     Notas y Observaciones del Entrenador:
                   </span>
-                  <p className="leading-relaxed text-gray-300">{selectedSession.notes}</p>
+                  <p className="leading-relaxed text-gray-300 print:text-gray-800">{selectedSession.notes}</p>
                 </div>
               )}
+
+              {/* Printable Official Session Footer (Visible on Paper / Print Only) */}
+              <div className="hidden print:flex items-center justify-between border-t border-gray-300 pt-3 mt-4 text-[10px] text-gray-500">
+                <span>FÚTBOL+ Planificación Metodológica de Campo • {selectedSession.exercises.length} Tareas</span>
+                <span>www.futbolplus.app • 1.000 Ejercicios Profesionales</span>
+              </div>
             </div>
           ) : (
             <div className="p-12 text-center bg-[#09150e] rounded-2xl border border-emerald-900/40 text-gray-400">
