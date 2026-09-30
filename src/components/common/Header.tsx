@@ -1,8 +1,14 @@
 import React from 'react';
-import { Shield, BookOpen, Heart, Layers, Gift, FileText, Dumbbell } from 'lucide-react';
+import { Shield, BookOpen, Heart, Dumbbell, Activity, Bot, Sparkles } from 'lucide-react';
 import { PWAInstallButton } from './PWAInstallButton';
 
-export type ActiveTab = 'inicio' | 'ejercicios' | 'favoritos' | 'entrenamientos' | 'bonos' | 'fichas';
+export type ActiveTab =
+  | 'inicio'
+  | 'ejercicios'
+  | 'fut-ia'
+  | 'preparacion-fisica'
+  | 'favoritos'
+  | 'entrenamientos';
 
 interface Props {
   activeTab: ActiveTab;
@@ -51,7 +57,7 @@ export const Header: React.FC<Props> = ({
               onClick={() => setActiveTab('inicio')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'inicio'
-                  ? 'bg-emerald-500 text-black shadow-sm'
+                  ? 'bg-emerald-500 text-black shadow-sm font-bold'
                   : 'text-gray-300 hover:text-white hover:bg-emerald-500/10'
               }`}
             >
@@ -63,7 +69,7 @@ export const Header: React.FC<Props> = ({
               onClick={() => setActiveTab('ejercicios')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'ejercicios'
-                  ? 'bg-emerald-500 text-black shadow-sm'
+                  ? 'bg-emerald-500 text-black shadow-sm font-bold'
                   : 'text-gray-300 hover:text-white hover:bg-emerald-500/10'
               }`}
             >
@@ -71,11 +77,47 @@ export const Header: React.FC<Props> = ({
               <span>1.000 Ejercicios</span>
             </button>
 
+            {/* TAB: FUT IA - Inteligência Artificial para Exercícios de Futebol */}
+            <button
+              onClick={() => setActiveTab('fut-ia')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === 'fut-ia'
+                  ? 'bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-300 text-black shadow-md font-extrabold'
+                  : 'text-emerald-300 hover:text-white hover:bg-emerald-500/15'
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5 text-emerald-400" />
+              <span>FUT IA</span>
+              <span className={`text-[9px] font-black px-1.5 py-0.2 rounded border uppercase tracking-wider ${
+                activeTab === 'fut-ia'
+                  ? 'bg-black text-emerald-300 border-black/40'
+                  : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+              }`}>
+                IA
+              </span>
+            </button>
+
+            {/* TAB PREPARACIÓN FÍSICA SOLICITADA POR EL USUARIO JUNTO A 1.000 EJERCICIOS */}
+            <button
+              onClick={() => setActiveTab('preparacion-fisica')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === 'preparacion-fisica'
+                  ? 'bg-emerald-500 text-black shadow-sm font-bold'
+                  : 'text-gray-300 hover:text-white hover:bg-emerald-500/10'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5 text-amber-400" />
+              <span>Preparación Física</span>
+              <span className="bg-amber-400/20 text-amber-300 text-[9px] font-extrabold px-1.5 py-0.2 rounded border border-amber-400/30">
+                PRO
+              </span>
+            </button>
+
             <button
               onClick={() => setActiveTab('favoritos')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'favoritos'
-                  ? 'bg-emerald-500 text-black shadow-sm'
+                  ? 'bg-emerald-500 text-black shadow-sm font-bold'
                   : 'text-gray-300 hover:text-white hover:bg-emerald-500/10'
               }`}
             >
@@ -98,18 +140,6 @@ export const Header: React.FC<Props> = ({
             >
               <Dumbbell className="w-3.5 h-3.5" />
               <span>Entrenamientos</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('bonos')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'bonos'
-                  ? 'bg-emerald-500 text-black shadow-sm'
-                  : 'text-gray-300 hover:text-white hover:bg-emerald-500/10'
-              }`}
-            >
-              <Gift className="w-3.5 h-3.5 text-amber-400" />
-              <span>10 Bonos</span>
             </button>
           </nav>
 

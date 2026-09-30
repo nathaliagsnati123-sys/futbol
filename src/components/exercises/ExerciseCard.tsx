@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Check, Clock, Users, PlusCircle } from 'lucide-react';
+import { Heart, Check, Clock, Users, PlusCircle, Bot } from 'lucide-react';
 import { Exercise } from '../../types';
 import { PitchThumbnail } from '../common/PitchThumbnail';
 import { getExercisePitchDiagram } from '../../utils/diagramGenerator';
@@ -12,6 +12,7 @@ interface Props {
   onToggleCompleted: (e: React.MouseEvent, id: string) => void;
   onSelect: (exercise: Exercise) => void;
   onAddToTraining?: (e: React.MouseEvent, exercise: Exercise) => void;
+  onAskFutIa?: (e: React.MouseEvent, exercise: Exercise) => void;
 }
 
 export const ExerciseCard: React.FC<Props> = ({
@@ -22,6 +23,7 @@ export const ExerciseCard: React.FC<Props> = ({
   onToggleCompleted,
   onSelect,
   onAddToTraining,
+  onAskFutIa,
 }) => {
   const diagram = getExercisePitchDiagram(exercise);
 
@@ -95,17 +97,31 @@ export const ExerciseCard: React.FC<Props> = ({
           <span>👥 {exercise.jugadoresLabel}</span>
         </div>
 
-        {onAddToTraining && (
-          <button
-            type="button"
-            onClick={(e) => onAddToTraining(e, exercise)}
-            title="Añadir al planificador de entrenamientos"
-            className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold transition shrink-0"
-          >
-            <PlusCircle className="w-3 h-3" />
-            <span>+ Entreno</span>
-          </button>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+          {onAskFutIa && (
+            <button
+              type="button"
+              onClick={(e) => onAskFutIa(e, exercise)}
+              title="Explicar paso a paso con FUT IA"
+              className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500 hover:text-black text-emerald-300 border border-emerald-500/40 text-[10px] font-black transition"
+            >
+              <Bot className="w-3 h-3" />
+              <span>FUT IA</span>
+            </button>
+          )}
+
+          {onAddToTraining && (
+            <button
+              type="button"
+              onClick={(e) => onAddToTraining(e, exercise)}
+              title="Añadir al planificador de entrenamientos"
+              className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold transition shrink-0"
+            >
+              <PlusCircle className="w-3 h-3" />
+              <span>+ Entreno</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

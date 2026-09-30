@@ -5,7 +5,7 @@ import {
   Dumbbell,
   Heart,
   CheckCircle2,
-  Gift,
+  Bot,
   ArrowRight,
   Flame,
   Sparkles,
@@ -191,6 +191,77 @@ export const DashboardView: React.FC<Props> = ({
             <span className="text-[10px] uppercase font-bold text-gray-400 block">Progreso</span>
             <div className="text-xl font-extrabold text-emerald-400 mt-0.5">{completionPercentage}%</div>
             <span className="text-[10px] text-gray-400 font-medium">{completedCount} completados</span>
+          </div>
+        </div>
+      </div>
+
+      {/* FUT IA Highlight Banner */}
+      <div
+        onClick={() => setActiveTab('fut-ia')}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0d2a1b] via-[#091f14] to-[#04140b] border-2 border-emerald-500/60 p-4 sm:p-5 shadow-xl hover:border-emerald-400 hover:shadow-emerald-950/80 transition-all cursor-pointer group"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-green-400 text-black shadow-lg shadow-emerald-950 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <Bot className="w-6 h-6 stroke-[2.3]" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black uppercase tracking-wider text-black bg-emerald-400 px-2 py-0.5 rounded shadow-sm">
+                  🤖 FUT IA
+                </span>
+                <span className="text-[10px] text-emerald-300 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                  Paso a Paso Inteligente de Cualquier Ejercicio
+                </span>
+              </div>
+              <h3 className="text-sm sm:text-base font-black text-white group-hover:text-emerald-300 transition-colors mt-0.5">
+                ¿Dudas sobre cómo aplicar un entrenamiento? Pide la explicación detallada a FUT IA
+              </h3>
+              <p className="text-xs text-gray-300 mt-0.5">
+                Organización del espacio, posicionamiento inicial, dinámica de ejecución, reglas de provocación, consignas del míster y correcciones en campo.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400 text-black text-xs font-black group-hover:brightness-110 shrink-0 self-end sm:self-center transition shadow-md">
+            <Bot className="w-3.5 h-3.5" />
+            <span>Consultar FUT IA</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        </div>
+      </div>
+
+      {/* High Performance Physical Prep Banner */}
+      <div
+        onClick={() => setActiveTab('preparacion-fisica')}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0d2a1b] via-[#091b11] to-[#0a2316] border border-amber-500/40 p-4 sm:p-5 shadow-lg hover:border-amber-400 hover:shadow-emerald-950/60 transition-all cursor-pointer group"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <span className="text-2xl">⚡</span>
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
+                  Nuevo Módulo de Rendimiento
+                </span>
+                <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                  Aba al lado de 1.000 Ejercicios
+                </span>
+              </div>
+              <h3 className="text-sm sm:text-base font-black text-white group-hover:text-emerald-300 transition-colors mt-0.5">
+                Preparación Física Integral para Fútbol: Protocolos, Morfociclo y Cronómetro
+              </h3>
+              <p className="text-xs text-gray-300 mt-0.5">
+                Fuerza unilateral, prevención FIFA 11+, sprints RSA con bips, calculadora de cargas Foster y test de campo.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 text-black text-xs font-bold group-hover:bg-emerald-400 shrink-0 self-end sm:self-center transition">
+            <span>Explorar Física</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
       </div>

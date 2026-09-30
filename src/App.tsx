@@ -7,7 +7,8 @@ import { ExerciseDetailModal } from './components/exercises/ExerciseDetailModal'
 import { ExerciseFilters } from './components/exercises/ExerciseFilters';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { TrainingView } from './components/training/TrainingView';
-import { BonusesView } from './components/bonuses/BonusesView';
+import { PreparacionFisicaView } from './components/physical/PreparacionFisicaView';
+import { FutIaView } from './components/ai/FutIaView';
 import { AddToTrainingModal } from './components/training/AddToTrainingModal';
 import { allExercises } from './data/exercises';
 import { Exercise, FilterState } from './types';
@@ -38,8 +39,16 @@ export default function App() {
   const [completed, setCompleted] = useState<string[]>(() => getStoredCompleted());
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
   const [exerciseForTrainingModal, setExerciseForTrainingModal] = useState<Exercise | null>(null);
+  const [exerciseForFutIa, setExerciseForFutIa] = useState<Exercise | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleOpenFutIa = useCallback((exercise?: Exercise | null) => {
+    if (exercise) {
+      setExerciseForFutIa(exercise);
+    }
+    setActiveTab('fut-ia');
+  }, []);
   const [trainingsCount, setTrainingsCount] = useState<number>(() => {
     const count = getStoredTrainings().length;
     return count > 0 ? count : 2;
@@ -348,6 +357,10 @@ export default function App() {
                         e.stopPropagation();
                         setExerciseForTrainingModal(ex);
                       }}
+                      onAskFutIa={(e, ex) => {
+                        e.stopPropagation();
+                        handleOpenFutIa(ex);
+                      }}
                     />
                   ))}
                 </div>
@@ -458,6 +471,10 @@ export default function App() {
                       e.stopPropagation();
                       setExerciseForTrainingModal(ex);
                     }}
+                    onAskFutIa={(e, ex) => {
+                      e.stopPropagation();
+                      handleOpenFutIa(ex);
+                    }}
                   />
                 ))}
               </div>
@@ -465,14 +482,29 @@ export default function App() {
           </div>
         )}
 
+        {/* TAB: FUT IA - INTELIGÊNCIA ARTIFICIAL PARA EXERCÍCIOS DE FUTEBOL */}
+        {activeTab === 'fut-ia' && (
+          <FutIaView
+            initialExercise={exerciseForFutIa}
+            onSelectExercise={setSelectedExercise}
+          />
+        )}
+
+        {/* TAB: PREPARACIÓN FÍSICA INTEGRAL (AL LADO DE 1.000 EJERCICIOS) */}
+        {activeTab === 'preparacion-fisica' && (
+          <PreparacionFisicaView
+            onSelectExercise={setSelectedExercise}
+            onToggleFavorite={handleToggleFavorite}
+            onToggleCompleted={handleToggleCompleted}
+            favorites={favorites}
+            completed={completed}
+            onAddToTraining={(ex) => setExerciseForTrainingModal(ex)}
+          />
+        )}
+
         {/* TAB 4: ENTRENAMIENTOS (Sesiones) */}
         {activeTab === 'entrenamientos' && (
           <TrainingView onSelectExercise={setSelectedExercise} />
-        )}
-
-        {/* TAB 5: BONOS */}
-        {(activeTab === 'bonos' || (activeTab as string) === 'fichas') && (
-          <BonusesView />
         )}
       </main>
 
@@ -494,6 +526,7 @@ export default function App() {
         onAddToTraining={(ex) => {
           setExerciseForTrainingModal(ex);
         }}
+        onAskFutIa={handleOpenFutIa}
       />
 
       {/* Add To Training Session Modal */}

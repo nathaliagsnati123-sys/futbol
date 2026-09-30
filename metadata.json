@@ -1,6 +1,6 @@
 {
   "name": "Fútbol+",
-  "description": "1.000 ejercicios de fútbol ilustrados, 10 bonos profesionales y herramientas tácticas para entrenadores y jugadores.",
+  "description": "1.000 ejercicios de fútbol ilustrados, FUT IA para paso a paso táctico y herramientas para entrenadores.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

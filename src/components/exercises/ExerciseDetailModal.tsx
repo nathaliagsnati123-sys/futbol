@@ -17,6 +17,8 @@ import {
   Share2,
   Printer,
   PlusCircle,
+  Bot,
+  Sparkles,
 } from 'lucide-react';
 import { Exercise } from '../../types';
 import { PitchDiagram } from '../common/PitchDiagram';
@@ -30,6 +32,7 @@ interface Props {
   onToggleFavorite: (id: string) => void;
   onToggleCompleted: (id: string) => void;
   onAddToTraining?: (exercise: Exercise) => void;
+  onAskFutIa?: (exercise: Exercise) => void;
 }
 
 export const ExerciseDetailModal: React.FC<Props> = ({
@@ -40,6 +43,7 @@ export const ExerciseDetailModal: React.FC<Props> = ({
   onToggleFavorite,
   onToggleCompleted,
   onAddToTraining,
+  onAskFutIa,
 }) => {
   if (!exercise) return null;
 
@@ -103,6 +107,23 @@ export const ExerciseDetailModal: React.FC<Props> = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0 print:hidden">
+            {/* Quick Ask FUT IA */}
+            {onAskFutIa && (
+              <button
+                type="button"
+                onClick={() => {
+                  onAskFutIa(exercise);
+                  onClose();
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400 text-black text-xs font-black hover:brightness-110 shadow-md transition"
+                title="Explicar paso a paso este ejercicio con FUT IA"
+              >
+                <Bot className="w-3.5 h-3.5 stroke-[2.2]" />
+                <span className="hidden sm:inline">Paso a Paso con</span>
+                <span>FUT IA</span>
+              </button>
+            )}
+
             {/* Quick Favorite */}
             <button
               type="button"
@@ -329,7 +350,21 @@ export const ExerciseDetailModal: React.FC<Props> = ({
 
         {/* Modal Footer Actions (Screen Only) */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 sm:p-5 border-t border-emerald-900/60 bg-[#07130b] shrink-0 print:hidden">
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+            {onAskFutIa && (
+              <button
+                type="button"
+                onClick={() => {
+                  onAskFutIa(exercise);
+                  onClose();
+                }}
+                className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400 text-black text-xs font-black shadow-md hover:brightness-110 transition"
+              >
+                <Bot className="w-4 h-4" />
+                <span>Paso a Paso con FUT IA</span>
+              </button>
+            )}
+
             {onAddToTraining && (
               <button
                 type="button"
